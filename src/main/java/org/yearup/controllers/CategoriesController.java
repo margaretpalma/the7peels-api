@@ -133,8 +133,17 @@ public class CategoriesController {
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCategory(@PathVariable int id)
-    {
-        categoryDao.delete(id);
+    public void deleteCategory(@PathVariable int id) {
+        try {
+            Category existing = categoryDao.getById(id);
+            if (existing == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found.");
+            }
+            categoryDao.delete(id);
+        } catch (ResponseStatusException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error deleting category.");
+        }
     }
 }
