@@ -1,4 +1,4 @@
-USE sys;
+order_line_items USE sys;
 
 # ---------------------------------------------------------------------- #
 # Target DBMS:           MySQL                                           #

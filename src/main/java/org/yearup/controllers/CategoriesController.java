@@ -43,8 +43,10 @@ public class CategoriesController {
         {
             try {
                 return categoryDao.getAllCategories();
+            } catch (ResponseStatusException ex) {
+                throw ex;
             } catch (Exception ex) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error getting categories.");
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops our bad!");
             }
         }
     }
@@ -97,10 +99,17 @@ public class CategoriesController {
     public Category addCategory(@RequestBody Category category) {
         try {
             return categoryDao.create(category);
-        } catch (Exception ex)
-        {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error creating category.");
+
         }
+        catch (ResponseStatusException ex)
+        {
+            throw ex;
+        }
+            catch (Exception ex)
+            {
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error creating category.");
+        }
+
     }
 
     // add annotation to call this method for a PUT (update) action - the url path must include the categoryId
@@ -119,9 +128,12 @@ public class CategoriesController {
             }
             // update the category by id
             categoryDao.update(id, category);
-        } catch (ResponseStatusException ex) {
+        } catch (ResponseStatusException ex)
+        {
             throw ex;
-        } catch (Exception ex) {
+
+        } catch (Exception ex)
+        {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error update category.");
         }
     }
