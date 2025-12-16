@@ -66,7 +66,10 @@ public class ProductsController
 
             return product;
         }
-        catch(Exception ex)
+        catch(ResponseStatusException ex) {
+            throw ex;
+        }
+        catch (Exception ex)
         {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
         }
