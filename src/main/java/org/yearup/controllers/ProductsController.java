@@ -1,10 +1,12 @@
 package org.yearup.controllers;
 
+import io.jsonwebtoken.security.WeakKeyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.yearup.data.CategoryDao;
 import org.yearup.models.Product;
 import org.yearup.data.ProductDao;
 
@@ -17,11 +19,13 @@ import java.util.List;
 public class ProductsController
 {
     private ProductDao productDao;
+    private CategoryDao categoryDao;
 
     @Autowired
-    public ProductsController(ProductDao productDao)
+    public ProductsController(ProductDao productDao, CategoryDao categoryDao)
     {
         this.productDao = productDao;
+        this.categoryDao = categoryDao;
     }
 
     @GetMapping("")
@@ -36,9 +40,16 @@ public class ProductsController
         {
             return productDao.search(categoryId, minPrice, maxPrice, subCategory);
         }
-        catch(Exception ex)
+        catch(ResponseStatusException ex)
         {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
+            throw ex;
+        }
+        catch (Exception ex)
+        {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Oops, our bad!"
+            );
         }
     }
 
@@ -81,7 +92,8 @@ public class ProductsController
     {
         try
         {
-            productDao.create(product);
+            //not create product, UPDATE product for
+            productDao.update(id,product);
         }
         catch(Exception ex)
         {
