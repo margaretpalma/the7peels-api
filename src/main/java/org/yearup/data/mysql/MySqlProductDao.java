@@ -28,10 +28,10 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao
                 "   AND (price <= ? OR ? = -1) " +
                 "   AND (subcategory = ? OR ? = '') ";
 
-        categoryId = categoryId == null ? -1 : categoryId;
-        minPrice = minPrice == null ? new BigDecimal("-1") : minPrice;
-        maxPrice = maxPrice == null ? new BigDecimal("-1") : maxPrice;
-        subCategory = subCategory == null ? "" : subCategory;
+        categoryId = (categoryId == null) ? -1 : categoryId;
+        minPrice = (minPrice == null) ? new BigDecimal("-1") : minPrice;
+        maxPrice = (maxPrice == null) ? new BigDecimal("-1") : maxPrice;
+        subCategory = (subCategory == null) ? "" : subCategory;
 
         try (Connection connection = getConnection())
         {
