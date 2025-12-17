@@ -2,9 +2,7 @@ package org.yearup.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.yearup.data.ProductDao;
 import org.yearup.data.ShoppingCartDao;
@@ -64,6 +62,24 @@ public class ShoppingCartController
 
     // add a POST method to add a product to the cart - the url should be
     // https://localhost:8080/cart/products/15 (15 is the productId to be added
+
+    @PostMapping("/products/{productId}")
+    public void addProduct(
+            @PathVariable int productId,
+            Principal principal)
+    {
+        String username = principal.getName();
+        User user = userDao.getByUserName(username);
+        int userId = user.getUserId();
+        ShoppingCart cart = shoppingCartDao.getByUserId(userId);
+
+
+
+
+
+
+
+    }
 
 
     // add a PUT method to update an existing product in the cart - the url should be
