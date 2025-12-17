@@ -4,7 +4,6 @@ import org.yearup.models.ShoppingCart;
 
 public interface ShoppingCartDao
 {
-
     //get shopping cart
     ShoppingCart geByUserId(int userId);
     //add a product into the cart
