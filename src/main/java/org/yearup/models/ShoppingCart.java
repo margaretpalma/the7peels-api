@@ -6,6 +6,8 @@ import java.util.Map;
 
 public class ShoppingCart
 {
+
+    //productid
     private Map<Integer, ShoppingCartItem> items = new HashMap<>();
 
     public Map<Integer, ShoppingCartItem> getItems()
@@ -18,16 +20,19 @@ public class ShoppingCart
         this.items = items;
     }
 
+    //check if cart already has product
     public boolean contains(int productId)
     {
         return items.containsKey(productId);
     }
 
+    //add or replace product
     public void add(ShoppingCartItem item)
     {
         items.put(item.getProductId(), item);
     }
 
+    //get by productid
     public ShoppingCartItem get(int productId)
     {
         return items.get(productId);
