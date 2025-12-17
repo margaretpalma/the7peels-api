@@ -41,12 +41,14 @@ public class ShoppingCartItem
         this.discountPercent = discountPercent;
     }
 
+    //used internally by ShoppingCart
     @JsonIgnore
     public int getProductId()
     {
         return this.product.getProductId();
     }
 
+    //price and quantity
     public BigDecimal getLineTotal()
     {
         BigDecimal basePrice = product.getPrice();
