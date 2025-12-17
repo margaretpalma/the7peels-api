@@ -20,7 +20,6 @@ public class MySqlUserDao extends MySqlDaoBase implements UserDao
         super(dataSource);
     }
 
-
     @Override
     public User create(User newUser)
     {
@@ -30,6 +29,7 @@ public class MySqlUserDao extends MySqlDaoBase implements UserDao
         try (Connection connection = getConnection())
         {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
             ps.setString(1, newUser.getUsername());
             ps.setString(2, hashedPassword);
             ps.setString(3, newUser.getRole());
@@ -54,6 +54,7 @@ public class MySqlUserDao extends MySqlDaoBase implements UserDao
         List<User> users = new ArrayList<>();
 
         String sql = "SELECT * FROM users";
+
         try (Connection connection = getConnection())
         {
             PreparedStatement statement = connection.prepareStatement(sql);
