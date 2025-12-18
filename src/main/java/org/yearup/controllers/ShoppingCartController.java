@@ -2,6 +2,7 @@ package org.yearup.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.yearup.data.ProductDao;
@@ -11,6 +12,7 @@ import org.yearup.models.ShoppingCart;
 import org.yearup.models.User;
 
 import java.security.Principal;
+import java.util.Map;
 
 // convert this class to a REST controller
 // only logged in users should have access to these actions
@@ -78,6 +80,25 @@ public class ShoppingCartController
     // https://localhost:8080/cart/products/15 (15 is the productId to be updated)
     // the BODY should be a ShoppingCartItem - quantity is the only value that will be updated
 
+    @PutMapping("/products/{productId}")
+    public void updateProduct(
+            @PathVariable int productId,
+            @RequestBody Map<String, Integer> body,
+            Principal principal)
+    {
+        try {
+            int quantity = body.get("quantity");
+
+            String userName = principal.getName();
+            User user = userDao.getByUserName(userName);
+
+            shoppingCartDao.updateQuantity(user.getId(), productId, quantity);
+        }
+        catch (Exception e)
+        {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops, our bad");
+        }
+    }
 
     // add a DELETE method to clear all products from the current users cart
     // https://localhost:8080/cart
