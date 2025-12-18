@@ -68,6 +68,10 @@ public class ShoppingCartController
 
             shoppingCartDao.addItem(user.getId(), productId, 1);
         }
+        catch (Exception e)
+        {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad");
+        }
     }
 
     // add a PUT method to update an existing product in the cart - the url should be
