@@ -53,16 +53,8 @@ public class ShoppingCartController
             @PathVariable int productId,
             Principal principal)
     {
-        try {
-            String userName = principal.getName();
-            User user = userDao.getByUserName(userName);
-
-            shoppingCartDao.addItem(user.getId(), productId, 1);
-        }
-        catch (Exception e)
-        {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad");
-        }
+        User user = userDao.getByUserName(principal.getName());
+        shoppingCartDao.addItem(user.getId(), productId, 1);
     }
 
     // add a PUT method to update an existing product in the cart - the url should be
