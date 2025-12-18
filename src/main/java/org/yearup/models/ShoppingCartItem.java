@@ -21,9 +21,9 @@ public class ShoppingCartItem
         this.product = product;
     }
 
-    public int getQuantity()
+    public int getQuantity(int quantity)
     {
-        return quantity;
+        return this.quantity;
     }
 
     public void setQuantity(int quantity)
