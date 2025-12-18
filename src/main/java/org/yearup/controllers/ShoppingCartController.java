@@ -38,21 +38,10 @@ public class ShoppingCartController
     @GetMapping
     public ShoppingCart getCart(Principal principal)
     {
-        try
-        {
-            // get the username of person
-            String userName = principal.getName();
-            // find database user by userId
-            User user = userDao.getByUserName(userName);
-            int userId = user.getId();
+      String username = principal.getName();
+      User user = userDao.getByUserName(username);
 
-            // use the shoppingcartDao to get all items in the cart and return the cart
-            return shoppingCartDao.geByUserId(userId);
-        }
-        catch(Exception e)
-        {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
-        }
+      return shoppingCartDao.geByUserId(user.getId());
     }
 
     // add a POST method to add a product to the cart - the url should be

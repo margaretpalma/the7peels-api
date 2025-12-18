@@ -72,7 +72,7 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
                     FROM shopping_cart
                     WHERE user_id = ? AND product_id = ? 
                     """;
-        try (Connection connection = getConnection() {
+        try (Connection connection = getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(check)) {
 
                 statement.setInt(1, userId);
