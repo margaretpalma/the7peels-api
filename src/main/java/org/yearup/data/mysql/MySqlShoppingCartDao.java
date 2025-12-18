@@ -23,12 +23,12 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
 
     //get the cart for the user, use database
 //    @Override
-//    public ShoppingCart geByUserId(int userId) {
+//    public ShoppingCart getByUserId(int userId) {
 //        return null;
 //    }
 
     @Override
-    public ShoppingCart geByUserId(int userId) {
+    public ShoppingCart getByUserId(int userId) {
         ShoppingCart cart = new ShoppingCart();
 
         String sql = """

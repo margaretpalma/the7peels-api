@@ -41,13 +41,13 @@ public class ShoppingCartController
       String username = principal.getName();
       User user = userDao.getByUserName(username);
 
-      return shoppingCartDao.geByUserId(user.getId());
+      return shoppingCartDao.getByUserId(user.getId());
     }
 
     // add a POST method to add a product to the cart - the url should be
     // https://localhost:8080/cart/products/15 (15 is the productId to be added
 
-    @PostMapping("/products/{id}")
+    @PostMapping("{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public void addProduct(
             @PathVariable int productId,
@@ -61,7 +61,7 @@ public class ShoppingCartController
     // https://localhost:8080/cart/products/15 (15 is the productId to be updated)
     // the BODY should be a ShoppingCartItem - quantity is the only value that will be updated
 
-    @PutMapping("/products/{productId}")
+    @PutMapping("{id}")
     public void updateProduct(
             @PathVariable int productId,
             @RequestBody Map<String, Integer> body,
@@ -76,7 +76,7 @@ public class ShoppingCartController
     // add a DELETE method to clear all products from the current users cart
     // https://localhost:8080/cart
 
-    @DeleteMapping
+    @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void clearCart(Principal principal)
     {
