@@ -15,7 +15,7 @@ import java.security.Principal;
 import java.util.Map;
 
 // convert this class to a REST controller
-// only logged in users should have access to these actions
+// only logged-in users should have access to these actions
 
 @RestController
 @RequestMapping("/cart")
@@ -117,5 +117,4 @@ public class ShoppingCartController
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops.. our bad.");
         }
        }
-    }
 }
