@@ -1,5 +1,5 @@
 package org.yearup.controllers;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -8,51 +8,43 @@ import org.yearup.data.ProductDao;
 import org.yearup.data.ShoppingCartDao;
 import org.yearup.data.UserDao;
 import org.yearup.models.ShoppingCart;
-import org.yearup.models.ShoppingCartItem;
 import org.yearup.models.User;
 
 import java.security.Principal;
 
-//rest controller - http request
-//requestmapping - base url for endpoints
-//preauthorize - requires user to be logged in
+// convert this class to a REST controller
+// only logged in users should have access to these actions
+
 @RestController
 @RequestMapping("/cart")
 @PreAuthorize("isAuthenticated()")
-
 public class ShoppingCartController
 {
-    //access to shopping cart
+    // a shopping cart requires
     private ShoppingCartDao shoppingCartDao;
-    //access to lookup users
     private UserDao userDao;
-    //access to product info
     private ProductDao productDao;
 
-//    //injecting dao
-//    @Autowired
-//    public ShoppingCartController(
-//    //assigns to controller
-//            ShoppingCartDao shoppingCartDao,
-//            UserDao userDao,
-//            ProductDao productDao) {
-//        this.shoppingCartDao = shoppingCartDao;
-//        this.userDao = userDao;
-//        this.productDao = productDao;
-//    }
+    public ShoppingCartController(ShoppingCartDao shoppingCartDao, UserDao userDao, ProductDao productDao) {
+        this.shoppingCartDao = shoppingCartDao;
+        this.userDao = userDao;
+        this.productDao = productDao;
+    }
 
+
+    // each method in this controller requires a Principal object as a parameter
     @GetMapping
     public ShoppingCart getCart(Principal principal)
     {
         try
         {
-            // Username of authenticated user
+            // get the currently logged in username
             String userName = principal.getName();
-
             // find database user by userId
             User user = userDao.getByUserName(userName);
+            int userId = user.getId();
 
-            //gets shopping cart associated with user
+            // use the shoppingcartDao to get all items in the cart and return the cart
             return null;
         }
         catch(Exception e)
@@ -61,35 +53,22 @@ public class ShoppingCartController
         }
     }
 
-//    // add a POST method to add a product to the cart - the url should be
-//    // https://localhost:8080/cart/products/15 (15 is the productId to be added
-//
-//    @PostMapping("/products/{productId}")
-//    public void addProduct(
-//            @PathVariable int productId,
-//            Principal principal)
-//    {
-//        String username = principal.getName();
-//        User user = userDao.getByUserName(username);
-//        int userId = user.getUserId();
-//        ShoppingCart cart = shoppingCartDao.getByUserId(userId);
-//
-//        if(cart.contains(productId))
-//        {
-//            ShoppingCartItem item = cart.get(productId);
-//
-//            shoppingCartDao.updateQuantity(
-//                    userId,
-//                    productId,
-//                    item.getQuantity() + 1);
-//        }
-//
-//
+    // add a POST method to add a product to the cart - the url should be
+    // https://localhost:8080/cart/products/15 (15 is the productId to be added
 
+    @PostMapping("/products/{productId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addProduct(
+            @PathVariable int productId,
+            Principal principal)
+    {
+        try {
+            String userName = principal.getName();
+            User user = userDao.getByUserName(userName);
 
-
+            shoppingCartDao.addItem(user.getId(), productId, 1);
+        }
     }
-
 
     // add a PUT method to update an existing product in the cart - the url should be
     // https://localhost:8080/cart/products/15 (15 is the productId to be updated)
@@ -99,3 +78,4 @@ public class ShoppingCartController
     // add a DELETE method to clear all products from the current users cart
     // https://localhost:8080/cart
 
+}
