@@ -1,11 +1,14 @@
 package org.yearup.data.mysql;
 
 import org.springframework.stereotype.Component;
+import org.yearup.models.Product;
 import org.yearup.models.Profile;
 import org.yearup.data.ProfileDao;
 
 import javax.sql.DataSource;
 import java.sql.*;
+
+import static org.yearup.data.mysql.MySqlProductDao.mapRow;
 
 @Component
 public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao
@@ -42,6 +45,61 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao
         {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Product getByUserId(int userId) {
+        String sql = """
+                SELECT user_id,
+                first_name, 
+                last_name,
+                phone,
+                email,
+                address,
+                city,
+                state, 
+                zip
+                FROM profiles
+                WHERE user_id = ?
+                """;
+    try (Connection connection = getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql))
+
+    {
+        statement.setInt(1, userId);
+
+        try(ResultSet row = statement.executeQuery())
+        {
+            if(!row.next())
+                return null;
+
+            return mapRow(row);
+        }
+    }
+        catch (SQLException e)
+        {
+            throw new RuntimeException("Error getting profile by user id", e);
+        }
+    }
+
+    @Override
+    public void update(int userId, Profile profile)
+    {
+        String sql = """
+        UPDATE profiles
+        SET first_name = ?,
+        last_name  = ?,
+        phone      = ?,
+        email      = ?,
+        address    = ?,
+        city       = ?,
+        state      = ?,
+        zip        = ?
+        WHERE user_id = ?
+        """;
+
+        try(Connection connection = getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql))
     }
 
 }
