@@ -15,11 +15,11 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
     {
         super(dataSource);
     }
-
+    // get all categories
+    //hold categories from database
     @Override
     public List<Category> getAllCategories() {
-        // get all categories
-        //hold categories from database
+
         List<Category> categories = new ArrayList<>();
 
         //query to pull categories
