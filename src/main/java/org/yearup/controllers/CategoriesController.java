@@ -37,26 +37,17 @@ public class CategoriesController {
     }
 
     // add the appropriate annotation for a get action
-    @GetMapping("")
+    //get /categories
+    @GetMapping
     public List<Category> getAll() {
         // find and return all categories
-        {
-            try {
-                return categoryDao.getAllCategories();
-            } catch (ResponseStatusException ex) {
-                throw ex;
-            } catch (Exception ex) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops our bad!");
-            }
-        }
+        return  categoryDao.getAllCategories();
     }
     // add the appropriate annotation for a get action
 
     @GetMapping("/{id}")
     public Category getById(@PathVariable int id)
-        {
-            try
-            {
+    {
                 //404 ERROR
                 Category category = categoryDao.getById(id);
                 if (category == null)
@@ -66,50 +57,23 @@ public class CategoriesController {
 
                 return category;
         }
-            catch (ResponseStatusException ex)
-            {
-                throw ex;
-            }
-            catch (Exception ex) {
-
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error Getting Category.");
-            }
         // get the category by id
-    }
 
     // the url to return all products in category 1 would look like this
     // https://localhost:8080/categories/1/products
 
-    @GetMapping("{categoryId}/products")
+    @GetMapping("/{categoryId}/products")
     public List<Product> getProductsById(@PathVariable int categoryId) {
-        try {
-            //null - unused filters
-            // get a list of product by categoryId
             return productDao.listByCategoryId(categoryId);
-        } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error getting products by category");
         }
-    }
 
     // add annotation to call this method for a POST action
     // add annotation to ensure that only an ADMIN can call this function
-    @PostMapping("")
+    @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public Category addCategory(@RequestBody Category category) {
-        try {
             return categoryDao.create(category);
-
-        }
-        catch (ResponseStatusException ex)
-        {
-            throw ex;
-        }
-            catch (Exception ex)
-            {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error creating category.");
-        }
-
     }
 
     // add annotation to call this method for a PUT (update) action - the url path must include the categoryId
@@ -118,44 +82,26 @@ public class CategoriesController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateCategory(@PathVariable int id, @RequestBody Category category) {
-        try {
-
-            category.setCategoryId(id);
-
-            Category existing = categoryDao.getById(id);
-            if (existing == null) {
+            if (categoryDao.getById(id) == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found.");
             }
             // update the category by id
+            category.setCategoryId(id);
             categoryDao.update(id, category);
-        } catch (ResponseStatusException ex)
-        {
-            throw ex;
-
-        } catch (Exception ex)
-        {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error update category.");
-        }
     }
 
 
     // add annotation to call this method for a DELETE action - the url path must include the categoryId
     // add annotation to ensure that only an ADMIN can call this function
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable int id) {
-        try {
             Category existing = categoryDao.getById(id);
             if (existing == null) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found.");
             }
             categoryDao.delete(id);
-        } catch (ResponseStatusException ex) {
-            throw ex;
-        } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error deleting category.");
-        }
     }
 }

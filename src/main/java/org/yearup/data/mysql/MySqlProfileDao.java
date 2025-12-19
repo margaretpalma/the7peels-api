@@ -47,6 +47,8 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao
         }
     }
 
+
+    //read profile
     @Override
     public Product getByUserId(int userId) {
         String sql = """
@@ -82,6 +84,7 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao
         }
     }
 
+    //update profile
     @Override
     public void update(int userId, Profile profile)
     {
@@ -117,8 +120,6 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao
         {
             throw new RuntimeException("Error updating profile", e);
         }
-
-
 
     }
 
